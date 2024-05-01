@@ -1,33 +1,33 @@
 const errorconstants = require("../constant/errorconstants");
 
-const errohandeler = (req, res, err, next) => {
-  const statuscode = res.statusCode ? res.statusCode : 500;
+const errohandeler = (err, req, res, next) => {
+  const statuscode = res.statusCode || errorconstants.internal_server_error;
   switch (statuscode) {
     case errorconstants.validation_error:
       res
         .status(statuscode)
-        .json({ title: "validation failed", message: err.message });
+        .json({ title: "Validation Failed", message: err.message });
 
       break;
 
     case errorconstants.internal_server_error:
       res
         .status(statuscode)
-        .json({ title: "internal server error", message: err.message });
+        .json({ title: "Internal Server Error", message: err.message });
 
       break;
     case errorconstants.forbiden:
-      res.status(statuscode).json({ title: "forbiden", message: err.message });
+      res.status(statuscode).json({ title: "Forbiden", message: err.message });
 
       break;
     case errorconstants.not_found:
-      res.status(statuscode).json({ title: "notfound", message: err.message });
+      res.status(statuscode).json({ title: "Not Found", message: err.message });
 
       break;
     case errorconstants.unauthorized:
       res
         .status(statuscode)
-        .json({ title: "unauthorized", message: err.message });
+        .json({ title: "Unauthorized", message: err.message });
 
       break;
 
