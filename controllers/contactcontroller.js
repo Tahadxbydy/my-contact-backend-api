@@ -1,6 +1,5 @@
 const asycnhandeler = require("express-async-handler");
-const contact = require("../model/contactmodel");
-// const { connect } = require("mongoose");
+const contact = require("../model/contactModel");
 
 //@desc Get all contacts
 //@desc Get /

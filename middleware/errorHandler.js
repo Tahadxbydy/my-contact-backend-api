@@ -1,4 +1,4 @@
-const errorconstants = require("../constant/errorconstants");
+const errorconstants = require("../constant/errorConstants");
 
 const errohandeler = (err, req, res, next) => {
   const statuscode = res.statusCode || errorconstants.internal_server_error;
