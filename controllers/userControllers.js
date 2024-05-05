@@ -23,7 +23,7 @@ loginController = asyncHandler(async (req, res) => {
         email: user.email,
       },
       process.env.SECRET_KEY,
-      { expiresIn: "30s" }
+      { expiresIn: "30m" }
     );
     res.status(200).json({
       title: "Authentication successful",
@@ -68,7 +68,22 @@ registerController = asyncHandler(async (req, res) => {
   }
 });
 
+currentUserInfoController = asyncHandler(async (req, res) => {
+  const user = await userschema.findOne({ _id: req._id });
+
+  if (user) {
+    res.status(200).json({
+      userName: user.userName,
+      email: user.email,
+    });
+  } else {
+    res.status(404);
+    throw Error("User Not Found");
+  }
+});
+
 module.exports = {
   loginController,
   registerController,
+  currentUserInfoController,
 };
