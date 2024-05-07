@@ -11,9 +11,9 @@ getcontacts = asycnhandeler(async (req, res) => {
   //   res.status(400);
   //   throw Error("all fields are required");
   // }
-  contacts = await contact.find();
+  contacts = await contact.find({ user_id: req._id });
 
-  res.status(200).json({ contacts });
+  res.status(200).json(contacts);
 });
 
 //@desc Get contact
@@ -24,13 +24,15 @@ getcontact = asycnhandeler(async (req, res) => {
   if (!id) {
     res.status(400);
     throw Error("id is required");
+  } else {
+    const contacts = await contact.findOne({ _id: id, user_id: req._id });
+    if (!contacts) {
+      res.status(404);
+      throw Error("contact not found");
+    } else {
+      res.status(200).json({ contacts });
+    }
   }
-  const contacts = await contact.findById(id);
-  if (!contacts) {
-    res.status(404);
-    throw Error("contact not found");
-  }
-  res.status(200).json({ contacts });
 });
 
 //@desc post contact
@@ -43,6 +45,7 @@ postcontact = asycnhandeler(async (req, res) => {
     throw Error("all feilds are required");
   }
   const contacts = await contact.create({
+    user_id: req._id,
     name: name,
     email: email,
     phone: phone,
@@ -60,8 +63,8 @@ updatecontact = asycnhandeler(async (req, res) => {
     res.status(400);
     throw Error("id is required");
   }
-  const updatedContact = await contact.findByIdAndUpdate(
-    id,
+  const updatedContact = await contact.findOneAndUpdate(
+    { _id: id, user_id: req._id },
     {
       name,
       email,
@@ -85,7 +88,10 @@ deletecontact = asycnhandeler(async (req, res) => {
     res.status(400);
     throw Error("id is required");
   }
-  const deletedcontact = await contact.findByIdAndDelete(id);
+  const deletedcontact = await contact.findOneAndDelete({
+    _id: id,
+    user_id: req._id,
+  });
   if (!deletedcontact) {
     res.status(404);
     throw Error("contact not found");
